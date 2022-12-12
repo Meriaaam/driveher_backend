@@ -28,9 +28,9 @@ router.post("/signup", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        mobile: req.body.mobile,
+        firstName: req.body.firstname,
+        lastName: req.body.lastname,
+        phoneNumber: req.body.mobile,
         email: req.body.email,
         password: hash,
         token: uid2(32),
@@ -49,12 +49,12 @@ router.post("/signup", (req, res) => {
 
 // SIGN IN ROOTS
 router.post("/signin", (req, res) => {
-  if (!checkBody(req.body, ["username", "password"])) {
+  if (!checkBody(req.body, ["email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
-  User.findOne({ username: req.body.username }).then((data) => {
+  User.findOne({ email: req.body.email }).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, token: data.token });
     } else {
@@ -63,14 +63,5 @@ router.post("/signin", (req, res) => {
   });
 });
 
-// router.get("/canUser/:token", (req, res) => {
-//   User.findOne({ token: req.params.token }).then((data) => {
-//     if (data) {
-//       res.json({ result: true, canBookmark: data.canBookmark });
-//     } else {
-//       res.json({ result: false, error: "User not found" });
-//     }
-//   });
-// });
 
 module.exports = router;

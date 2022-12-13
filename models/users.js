@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
-  phoneNumber: String,
+  phoneNumber: Number,
   password: String,
   token: String,
   favoriteLocation: [{type: mongoose.Schema.Types.ObjectId, ref: 'favoritelocation'}],

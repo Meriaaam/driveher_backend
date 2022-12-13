@@ -11,9 +11,9 @@ const bcrypt = require("bcrypt");
 router.post("/signup", (req, res) => {
   if (
     !checkBody(req.body, [
-      "firstname",
-      "lastname",
-      "mobile",
+      "firstName",
+      "lastName",
+      "phoneNumber",
       "email",
       "password",
     ])
@@ -30,7 +30,7 @@ router.post("/signup", (req, res) => {
       const newUser = new User({
         firstName: req.body.firstname,
         lastName: req.body.lastname,
-        phoneNumber: req.body.mobile,
+        phoneNumber: req.body.phoneNumber,
         email: req.body.email,
         password: hash,
         token: uid2(32),
@@ -55,7 +55,7 @@ router.post("/signin", (req, res) => {
   }
 
   // User already exists in database or wrong password
-  User.findOne({ email: req.body.email }).then((data) => {
+  User.findOne({ email: req.body.email}).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, token: data.token });
     } else {

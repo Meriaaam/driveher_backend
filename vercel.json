@@ -6,6 +6,6 @@
     }],
     "routes": [{
       "src": "/(.*)",
-      "dest": "app.js"
+      "dest": "ap_p.js"
     }]
   }

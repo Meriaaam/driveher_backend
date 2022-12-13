@@ -55,7 +55,7 @@ router.post("/signin", (req, res) => {
   }
 
   // User already exists in database or wrong password
-  User.findOne({ email: req.body.email }).then((data) => {
+  User.findOne({ email: req.body.email}).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, token: data.token });
     } else {

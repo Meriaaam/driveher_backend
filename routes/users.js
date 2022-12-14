@@ -28,13 +28,12 @@ router.post("/signup", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        firstName: req.body.firstname,
-        lastName: req.body.lastname,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
+        firstName: req.body.firstName.toLowerCase(),
+        lastName: req.body.lastName.toLowerCase(),
+        phoneNumber: req.body.phoneNumber.toLowerCase(),
+        email: req.body.email.toLowerCase(),
         password: hash,
         token: uid2(32),
-        canUser: true,
       });
 
       newUser.save().then((newDoc) => {
@@ -55,7 +54,7 @@ router.post("/signin", (req, res) => {
   }
 
   // User already exists in database or wrong password
-  User.findOne({ email: req.body.email}).then((data) => {
+  User.findOne({ email: req.body.email.toLowerCase()}).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, token: data.token });
     } else {

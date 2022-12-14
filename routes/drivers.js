@@ -41,4 +41,11 @@ router.get('/displayDrivers', (req, res) =>
   })
 );
 
+router.get('/getDriver/:latitude/:longitude', (req, res) => {
+  const { latitude, longitude } = req.params;
+  Driver.findOne({ latitude: latitude, longitude: longitude }).then((data) => {
+    res.json({ result: true, driver: data });
+  });
+});
+
 module.exports = router;

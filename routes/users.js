@@ -7,10 +7,8 @@ const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
-
 const EMAIL_REGEX =
-/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 // SIGN UP ROOTS
 router.post("/signup", (req, res) => {
@@ -41,15 +39,13 @@ router.post("/signup", (req, res) => {
         token: uid2(32),
       });
 
-      if(!EMAIL_REGEX.test(newUser.email)){
-        res.json({result:false, error:"Email not valide"})
-      }
-      else{
+      if (!EMAIL_REGEX.test(newUser.email)) {
+        res.json({ result: false, error: "Email not valid" });
+      } else {
         newUser.save().then((newDoc) => {
           res.json({ result: true, user: newDoc });
         });
       }
-
     } else {
       // User already exists in database
       res.json({ result: false, error: "User already exists" });
@@ -65,13 +61,38 @@ router.post("/signin", (req, res) => {
   }
 
   // User already exists in database or wrong password
-  User.findOne({ email: req.body.email.toLowerCase()}).then((data) => {
+  User.findOne({ email: req.body.email.toLowerCase() }).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
       res.json({ result: true, user: data });
     } else {
       res.json({ result: false, error: "User not found or wrong password" });
     }
   });
+});
+
+// FIND USER DATA ROOTS
+router.get("/userData/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+    } else {
+      res.json({ result: true, userData: data });
+    }
+  });
+});
+
+// UPDATE USER DATA ROOTS
+router.put("/updateUser/:token", (req, res, next) => {
+  User.findOneAndUpdate(
+    req.params.token,
+    req.body,
+    { new: true },
+    (err, user) => {
+      if (err) return res.status(500).send(err);
+      if (!user) return res.status(404).send("User introuvable.");
+      return res.send(user);
+    }
+  );
 });
 
 module.exports = router;

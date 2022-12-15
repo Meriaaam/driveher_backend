@@ -7,6 +7,11 @@ const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
+
+const EMAIL_REGEX =
+/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
 // SIGN UP ROOTS
 router.post("/signup", (req, res) => {
   if (
@@ -36,9 +41,15 @@ router.post("/signup", (req, res) => {
         token: uid2(32),
       });
 
-      newUser.save().then((newDoc) => {
-        res.json({ result: true, user: newDoc });
-      });
+      if(!EMAIL_REGEX.test(newUser.email)){
+        res.json({result:false, error:"Email not valide"})
+      }
+      else{
+        newUser.save().then((newDoc) => {
+          res.json({ result: true, user: newDoc });
+        });
+      }
+
     } else {
       // User already exists in database
       res.json({ result: false, error: "User already exists" });

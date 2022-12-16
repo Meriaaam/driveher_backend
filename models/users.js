@@ -1,15 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
-  phoneNumber: Number,
+  phoneNumber: String,
   password: String,
   token: String,
-  favoriteLocation: [{type: mongoose.Schema.Types.ObjectId, ref: 'favoritelocation'}],
+  favoriteLocation: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "favoritelocation" },
+  ],
 });
 
-const User = mongoose.model('users', userSchema);
+const User = mongoose.model("users", userSchema);
 
 module.exports = User;

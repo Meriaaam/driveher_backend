@@ -127,9 +127,14 @@ router.put("/addCard/:token", (req, res) => {
   })
   });
 
-  router.get('/userCard', (req,res) => {
-    User.findOne({token: req.body.token}).populate('card').then(data => {
-      res.json({result: true, userCard: data.card});
+  router.get('/userCard/:token', (req,res) => {
+    User.findOne({token: req.params.token}).populate('card').then(data => {
+      if(data === null){
+        res.json({result:true, error: 'User not found'});
+      }
+      else{
+        res.json({result: true, userCard: data.card});
+      }
     })
   })
 

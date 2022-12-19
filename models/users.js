@@ -7,9 +7,8 @@ const userSchema = mongoose.Schema({
   phoneNumber: String,
   password: String,
   token: String,
-  favoriteLocation: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "favoritelocation" },
-  ],
+  favoriteLocation: { type: mongoose.Schema.Types.ObjectId, ref: "favoritelocation" },
+  card: {type: mongoose.Schema.Types.ObjectId, ref: 'cards'}
 });
 
 const User = mongoose.model("users", userSchema);

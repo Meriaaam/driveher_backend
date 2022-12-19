@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
+const Card = require("../models/cards");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
@@ -94,5 +95,43 @@ router.put("/updateUser/:token", (req, res, next) => {
     }
   );
 });
+
+
+// add CARD 
+router.put("/addCard/:token", (req, res) => {
+  if (
+    !checkBody(req.body, [
+      "cardNumber",
+    ])
+  ) {
+    res.json({ result: false, error: "Missing fields" });
+    return;
+    }
+  User.findOne({token: req.params.token}).then(data => {
+    if(data === null){
+      res.json({result: false, error: 'user not found'});
+    }else{
+      Card.findOne({cardNumber: req.body.cardNumber}).then(cardData => {
+        if(cardData === null){
+          res.json({result: false, error: "card not found"})
+        }
+        else{
+          User.updateOne( {token: req.params.token}, {card: cardData._id})
+          .then(() => {
+            res.json({result: true, message: "Card added successfully"})
+          })
+
+        }
+      })
+    }
+  })
+  });
+
+  router.get('/userCard', (req,res) => {
+    User.findOne({token: req.body.token}).populate('card').then(data => {
+      res.json({result: true, userCard: data.card});
+    })
+  })
+
 
 module.exports = router;

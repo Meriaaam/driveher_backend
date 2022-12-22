@@ -9,7 +9,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var driversRouter = require('./routes/drivers');
 var ratingsRouter = require('./routes/ratings');
-
+var ordersRouter = require('./routes/orders');
 
 var app = express();
 
@@ -26,6 +26,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/drivers', driversRouter);
 app.use('/ratings', ratingsRouter);
-
+app.use('/orders', ordersRouter);
 
 module.exports = app;

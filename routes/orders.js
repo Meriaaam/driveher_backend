@@ -44,11 +44,13 @@ router.get('/userOrders/:token', (req, res) => {
     User.findOne({token: req.params.token}).then(data => {
         if(data){
             Order.find({user: data._id}).then(history => {
-                res.json({result: true, userOrders: history})
+                if(history.length === 0){
+                    res.json({result: false, error: "No orders found"})
+                }
+                else{
+                    res.json({result: true, userOrders: history})
+                }
             })
-        }
-        else{
-            res.json({result: false, error: "No orders found"})
         }
     })
 });

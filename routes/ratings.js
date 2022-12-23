@@ -23,16 +23,7 @@ router.post("/addRating", (req, res) => {
   })
 });
 
-// FIND ALL RATINGS
-router.get("/getRating", (req, res) => {
-  Rating.find((error, ratings) => {
-    if (error) {
-      res.status(400).send(error);
-    } else {
-      res.send(ratings);
-    }
-  });
-});
+
 
 // FIND RATINGS BY ID
 router.get("/getRating/:driver", (req, res) => {
